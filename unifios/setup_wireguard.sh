@@ -1,12 +1,16 @@
 #!/bin/sh
 # This script loads the wireguard module and copies the wireguard tools.
-# The built-in kernel module will be loaded if it exists.
+
+# Set this option to 1 to try to load the built-in wireguard module first.
+# Set to 0 to only load external module provided by this package.
+LOAD_BUILTIN=1
+
 WIREGUARD="$(cd "$(dirname "$0")" && pwd -P)"
 
 # create symlinks to wireguard tools
 ln -sf $WIREGUARD/tools/wg-quick /usr/bin
 ln -sf $WIREGUARD/tools/wg /usr/bin
-ln -sf $WIREGUARD/tools/qrencode /usr/bin
+ln -s $WIREGUARD/tools/qrencode /usr/bin 2>/dev/null
 if [ ! -x "$(command -v bash)" ]; then
 	ln -sf $WIREGUARD/tools/bash /bin
 fi
@@ -40,11 +44,11 @@ if [ $? -eq 1 ]
 then
    ver=`uname -r`
    echo "loading wireguard..."
-   if [ -e /lib/modules/$ver/extra/wireguard.ko ]; then
-      modprobe wireguard
+   if [ "$LOAD_BUILTIN" = "1" -a -e /lib/modules/$ver/extra/wireguard.ko ]; then
+     modprobe wireguard
    elif [ -e $WIREGUARD/modules/wireguard-$ver.ko ]; then
      insmod $WIREGUARD/modules/wireguard-$ver.ko
-#    iptable_raw required for wg-quick's use of iptables-restore
+     # iptable_raw required for wg-quick's use of iptables-restore
      insmod $WIREGUARD/modules/iptable_raw-$ver.ko
      insmod $WIREGUARD/modules/ip6table_raw-$ver.ko
    else

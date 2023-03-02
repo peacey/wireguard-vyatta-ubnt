@@ -367,7 +367,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 # BR2_LINUX_KERNEL_CUSTOM_GIT is not set
 # BR2_LINUX_KERNEL_CUSTOM_HG is not set
 # BR2_LINUX_KERNEL_CUSTOM_SVN is not set
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://unifios.s3.us-west-2.amazonaws.com/linux-udr-2.2.12.tar.gz"
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://unifios.s3.us-west-2.amazonaws.com/linux-udr-3.0.13.tar.gz"
 BR2_LINUX_KERNEL_VERSION="custom"
 BR2_LINUX_KERNEL_PATCH="linux-patches"
 # BR2_LINUX_KERNEL_USE_DEFCONFIG is not set
