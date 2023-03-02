@@ -276,12 +276,9 @@ jobs:
           sed -i "s/PACKAGE_VERSION/$TOOLS_VERSION/g" buildroot-2017.11.1/package/wireguard-tools/wireguard-tools.mk
       - name: Patches
         run: |
-          patch -p0 <unifios/patches/wireguard-packages.patch
-          patch -p0 <unifios/patches/openresolv-package.patch
-          patch -d buildroot-2017.11.1 -p1 <unifios/patches/add-kernel-4-19.patch
-          cp unifios/patches/0001-m4-glibc-change-work-around.patch buildroot-2017.11.1/package/m4
-          cp unifios/patches/0001-bison-glibc-change-work-around.patch buildroot-2017.11.1/package/bison
-          cp unifios/patches/944-mpc-relative-literal-loads-logic-in-aarch64_classify_symbol.patch buildroot-2017.11.1/package/gcc/6.4.0
+          for patch in unifios/patches/*.patch; do
+            patch -p0 < "$patch"
+          done
       - name: Generate artifacts
         run: tar -cf buildroot.tar buildroot-2017.11.1
       - name: Store headers
@@ -294,7 +291,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        base: [udm-1.9.0-10, udm-1.10.0-8, udm-1.10.0-12, udm-se-2.2.4, udr-2.2.12]
+        base: [udm-1.9.0-10, udm-1.10.0-8, udm-1.10.0-12, udm-1.11.0, udm-2.4, udr-2.2.12]
     steps:
       - uses: actions/checkout@v2
       - name: Restore buildroot
